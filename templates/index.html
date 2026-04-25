@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Probe</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Server Probe</h1>
+            <p class="subtitle">实时监控面板</p>
+        </header>
+        <main class="grid">
+            <div class="card">
+                <h2>CPU 使用率</h2>
+                <p class="value" id="cpu">--</p>
+            </div>
+            <div class="card">
+                <h2>内存使用率</h2>
+                <p class="value" id="memory">--</p>
+            </div>
+            <div class="card">
+                <h2>磁盘使用率</h2>
+                <p class="value" id="disk">--</p>
+            </div>
+            <div class="card">
+                <h2>网络上传速度</h2>
+                <p class="value" id="sent">--</p>
+            </div>
+            <div class="card">
+                <h2>网络下载速度</h2>
+                <p class="value" id="recv">--</p>
+            </div>
+            <div class="card">
+                <h2>系统运行时间</h2>
+                <p class="value" id="uptime">--</p>
+            </div>
+            <div class="card" id="load-card">
+                <h2>Load Average</h2>
+                <p class="value" id="load">--</p>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
