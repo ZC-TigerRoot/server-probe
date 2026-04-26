@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Probe</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -12,36 +13,85 @@
             <h1>Server Probe</h1>
             <p class="subtitle">实时监控面板</p>
         </header>
-        <main class="grid">
-            <div class="card">
-                <h2>CPU 使用率</h2>
-                <p class="value" id="cpu">--</p>
+        
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="overview">概览</button>
+            <button class="tab-btn" data-tab="charts">趋势图表</button>
+            <button class="tab-btn" data-tab="processes">进程管理</button>
+        </nav>
+        
+        <!-- 概览 Tab -->
+        <section id="overview" class="tab-content active">
+            <main class="grid">
+                <div class="card">
+                    <h2>CPU 使用率</h2>
+                    <p class="value" id="cpu">--</p>
+                </div>
+                <div class="card">
+                    <h2>内存使用率</h2>
+                    <p class="value" id="memory">--</p>
+                </div>
+                <div class="card">
+                    <h2>磁盘使用率</h2>
+                    <p class="value" id="disk">--</p>
+                </div>
+                <div class="card">
+                    <h2>网络上传速度</h2>
+                    <p class="value" id="sent">--</p>
+                </div>
+                <div class="card">
+                    <h2>网络下载速度</h2>
+                    <p class="value" id="recv">--</p>
+                </div>
+                <div class="card">
+                    <h2>系统运行时间</h2>
+                    <p class="value" id="uptime">--</p>
+                </div>
+                <div class="card" id="load-card">
+                    <h2>Load Average</h2>
+                    <p class="value" id="load">--</p>
+                </div>
+            </main>
+        </section>
+        
+        <!-- 趋势图表 Tab -->
+        <section id="charts" class="tab-content">
+            <div class="chart-container">
+                <h2>CPU & 内存使用率趋势（1小时）</h2>
+                <canvas id="usageChart"></canvas>
             </div>
-            <div class="card">
-                <h2>内存使用率</h2>
-                <p class="value" id="memory">--</p>
+            <div class="chart-container">
+                <h2>网络速度趋势（1小时）</h2>
+                <canvas id="networkChart"></canvas>
             </div>
-            <div class="card">
-                <h2>磁盘使用率</h2>
-                <p class="value" id="disk">--</p>
+        </section>
+        
+        <!-- 进程管理 Tab -->
+        <section id="processes" class="tab-content">
+            <div class="process-header">
+                <h2>进程列表</h2>
+                <button id="refresh-processes" class="btn">刷新</button>
             </div>
-            <div class="card">
-                <h2>网络上传速度</h2>
-                <p class="value" id="sent">--</p>
+            <div class="table-responsive">
+                <table class="process-table">
+                    <thead>
+                        <tr>
+                            <th>PID</th>
+                            <th>名称</th>
+                            <th>CPU %</th>
+                            <th>内存 %</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="process-list">
+                        <tr>
+                            <td colspan="6" class="text-center">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="card">
-                <h2>网络下载速度</h2>
-                <p class="value" id="recv">--</p>
-            </div>
-            <div class="card">
-                <h2>系统运行时间</h2>
-                <p class="value" id="uptime">--</p>
-            </div>
-            <div class="card" id="load-card">
-                <h2>Load Average</h2>
-                <p class="value" id="load">--</p>
-            </div>
-        </main>
+        </section>
     </div>
     <script src="/static/js/dashboard.js"></script>
 </body>
