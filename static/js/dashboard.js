@@ -73,12 +73,17 @@ async function loadCharts() {
         const response = await fetch('/api/history?minutes=60');
         const data = await response.json();
         
+        const usageCanvas = document.getElementById('usageChart');
+        const networkCanvas = document.getElementById('networkChart');
+        if (!usageCanvas || !networkCanvas) {
+            console.warn('图表 canvas 元素未找到');
+            return;
+        }
+
         // 如果没有数据，显示提示
         if (data.length === 0) {
-            const usageContainer = document.getElementById('usageChart').parentElement;
-            const networkContainer = document.getElementById('networkChart').parentElement;
-            usageContainer.innerHTML = '<h2>CPU & 内存使用率趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新（数据每10秒保存一次）</p>';
-            networkContainer.innerHTML = '<h2>网络速度趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新</p>';
+            usageCanvas.parentElement.innerHTML = '<h2>CPU & 内存使用率趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新（数据每10秒保存一次）</p>';
+            networkCanvas.parentElement.innerHTML = '<h2>网络速度趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新</p>';
             return;
         }
         
@@ -92,7 +97,7 @@ async function loadCharts() {
         const recvData = data.map(d => d.recv_speed / 1024); // KB/s
         
         // CPU & 内存图表
-        const usageCtx = document.getElementById('usageChart').getContext('2d');
+        const usageCtx = usageCanvas.getContext('2d');
         if (usageChart) usageChart.destroy();
         usageChart = new Chart(usageCtx, {
             type: 'line',
@@ -141,7 +146,7 @@ async function loadCharts() {
         });
         
         // 网络速度图表
-        const networkCtx = document.getElementById('networkChart').getContext('2d');
+        const networkCtx = networkCanvas.getContext('2d');
         if (networkChart) networkChart.destroy();
         networkChart = new Chart(networkCtx, {
             type: 'line',

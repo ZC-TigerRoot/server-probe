@@ -4,6 +4,7 @@ from datetime import timedelta
 
 import psutil
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
@@ -22,6 +23,17 @@ init_db()
 @app.get("/")
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+        '<rect width="100" height="100" rx="20" fill="#0f172a"/>'
+        '<text x="50" y="68" text-anchor="middle" fill="#22d3ee" font-size="60" font-family="monospace" font-weight="bold">SP</text>'
+        '</svg>'
+    )
+    return Response(content=svg, media_type="image/svg+xml")
 
 
 @app.get("/api/history")
