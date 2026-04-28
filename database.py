@@ -57,7 +57,7 @@ def get_history(minutes: int = 60):
     """获取最近 N 分钟的历史数据"""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    since = datetime.now() - timedelta(minutes=minutes)
+    since = datetime.utcnow() - timedelta(minutes=minutes)
     cursor.execute("""
         SELECT timestamp, cpu, memory, disk, sent_speed, recv_speed
         FROM metrics
@@ -84,7 +84,7 @@ def cleanup_old_data(days: int = 7):
     """清理超过 N 天的旧数据"""
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cutoff = datetime.now() - timedelta(days=days)
+    cutoff = datetime.utcnow() - timedelta(days=days)
     cursor.execute("DELETE FROM metrics WHERE timestamp < ?", (cutoff,))
     conn.commit()
     conn.close()
