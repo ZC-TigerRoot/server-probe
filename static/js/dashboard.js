@@ -72,20 +72,44 @@ async function loadCharts() {
     try {
         const response = await fetch('/api/history?minutes=60');
         const data = await response.json();
-        
+
         const usageCanvas = document.getElementById('usageChart');
         const networkCanvas = document.getElementById('networkChart');
+
+        // 详细诊断哪个 canvas 缺失
+        if (!usageCanvas) {
+            console.error('找不到 #usageChart canvas 元素，可能已被意外移除');
+        }
+        if (!networkCanvas) {
+            console.error('找不到 #networkChart canvas 元素，可能已被意外移除');
+        }
         if (!usageCanvas || !networkCanvas) {
-            console.warn('图表 canvas 元素未找到');
             return;
         }
 
-        // 如果没有数据，显示提示
-        if (data.length === 0) {
-            usageCanvas.parentElement.innerHTML = '<h2>CPU & 内存使用率趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新（数据每10秒保存一次）</p>';
-            networkCanvas.parentElement.innerHTML = '<h2>网络速度趋势（1小时）</h2><p class="text-center" style="padding: 50px;">暂无数据，请等待几分钟后刷新</p>';
+        // 检查 Chart.js 是否加载
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js 未加载，请检查 CDN 连接');
             return;
         }
+
+        const usageNoData = document.querySelector('#usageChartContainer .no-data-msg');
+        const networkNoData = document.querySelector('#networkChartContainer .no-data-msg');
+
+        // 如果没有数据，显示提示（不销毁 canvas）
+        if (data.length === 0) {
+            usageCanvas.style.display = 'none';
+            networkCanvas.style.display = 'none';
+            if (usageNoData) usageNoData.style.display = 'block';
+            if (networkNoData) networkNoData.style.display = 'block';
+            return;
+        }
+
+        // 有数据时，确保 canvas 可见
+        usageCanvas.style.display = '';
+        networkCanvas.style.display = '';
+        if (usageNoData) usageNoData.style.display = 'none';
+        if (networkNoData) networkNoData.style.display = 'none';
         
         const labels = data.map(d => {
             const date = new Date(d.timestamp);

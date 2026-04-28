@@ -56,13 +56,15 @@
         
         <!-- 趋势图表 Tab -->
         <section id="charts" class="tab-content">
-            <div class="chart-container">
+            <div class="chart-container" id="usageChartContainer">
                 <h2>CPU & 内存使用率趋势（1小时）</h2>
                 <canvas id="usageChart"></canvas>
+                <p class="no-data-msg" style="display:none; text-align:center; padding:50px; color:#94a3b8;">暂无数据，请等待几分钟后刷新（数据每10秒保存一次）</p>
             </div>
-            <div class="chart-container">
+            <div class="chart-container" id="networkChartContainer">
                 <h2>网络速度趋势（1小时）</h2>
                 <canvas id="networkChart"></canvas>
+                <p class="no-data-msg" style="display:none; text-align:center; padding:50px; color:#94a3b8;">暂无数据，请等待几分钟后刷新</p>
             </div>
         </section>
         
